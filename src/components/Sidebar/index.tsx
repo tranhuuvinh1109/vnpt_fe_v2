@@ -1,14 +1,13 @@
 import { LogOut } from "lucide-react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/logo.png";
 import { SIDEBARS } from "../../constant";
+import { useAppContext } from "../../provider/context";
 
 const Sidebar = () => {
-  const [currentPath, setCurrentPath] = useState(SIDEBARS[0].url);
-
+  const { pathActive } = useAppContext();
   return (
-    <div className="flex h-screen w-72 flex-col p-2">
+    <div className="hidden h-screen w-72 flex-col p-2 md:flex">
       <Link to={"/"} className="mx-auto w-52 py-4">
         <img alt="logo" src={Logo} className="" />
       </Link>
@@ -19,7 +18,7 @@ const Sidebar = () => {
             <Link
               key={item.url}
               to={item.url}
-              className={`flex cursor-pointer items-center gap-2 rounded-xl p-3 text-gray-600 hover:bg-elementPrimary hover:text-white ${item.url === currentPath ? "  bg-elementPrimary !text-white" : ""}`}
+              className={`flex cursor-pointer items-center gap-2 rounded-xl p-3 text-gray-600 hover:bg-elementPrimary hover:text-white ${item.url === pathActive ? "  bg-elementPrimary !text-white" : ""}`}
             >
               <Icon fontSize={24} />
               <span className="text-base font-medium">{item.label}</span>
