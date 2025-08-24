@@ -4,7 +4,7 @@ import { SidebarItemType } from "../type";
 export const SIDEBARS: SidebarItemType[] = [
   {
     label: "Kế hoạch tuần tra",
-    url: "patrol-plan", // Kế hoạch tuần tra
+    url: "", // Kế hoạch tuần tra
     icon: FileSliders,
   },
   {
