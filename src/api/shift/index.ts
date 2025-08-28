@@ -9,9 +9,9 @@ export const useGetAllShift = () => {
   });
 };
 
-export const useGetAllShiftOrderByDate = () => {
+export const useGetAllShiftOrderByDate = ({ from, to }: { from?: string; to?: string }) => {
   return useQuery({
-    queryKey: [QUERY_KEY.GET_ALL_SHIFT_ORDER_BY_DATE],
-    queryFn: getAllShiftOrderByDate,
+    queryKey: [QUERY_KEY.GET_ALL_SHIFT_ORDER_BY_DATE, from, to],
+    queryFn: () => getAllShiftOrderByDate({ from, to }),
   });
 };

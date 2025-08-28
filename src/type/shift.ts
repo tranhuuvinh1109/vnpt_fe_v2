@@ -1,3 +1,4 @@
+import { EShiftStatus } from "../enum";
 import { InfoType } from "./infoType";
 import { StationType } from "./station";
 import { UserType } from "./user";
@@ -14,7 +15,7 @@ export type ShiftType = {
   infor_exist: number;
   infor_during: number;
   infor_pre: number;
-  status: string;
+  status: EShiftStatus;
   approved: boolean;
   note: string;
   create_user: number;
@@ -32,7 +33,7 @@ export type ShiftDetailType = {
   infor_exist: InfoType;
   infor_during: InfoType;
   infor_pre: InfoType;
-  status: string;
+  status: EShiftStatus;
   approved: boolean;
   note: string;
   create_user: UserType;

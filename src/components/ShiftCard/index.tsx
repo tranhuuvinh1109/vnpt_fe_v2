@@ -3,20 +3,29 @@ import { SquareChevronDown, SquareMinus } from "lucide-react";
 import { useState } from "react";
 import DefaultAvt from "../../assets/images/default-avatar.png";
 import { ShiftDetailType } from "../../type";
-import { ShiftInfo } from "./components";
+import { ShiftInfo, ShiftStatus } from "./components";
 
 type ShiftCardProps = {
   data: ShiftDetailType;
+  label?: string;
 };
 
-export const ShiftCard = ({ data }: ShiftCardProps) => {
+export const ShiftCard = ({ data, label }: ShiftCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleShift = () => setIsOpen((pre) => !pre);
   return (
     <div className="rounded-lg  bg-white p-2 shadow-2xl">
       <div className="flex items-center justify-between hover:cursor-pointer  " onClick={toggleShift}>
-        <h1 className="text-xl font-semibold">Ca - {data.shift_number}</h1>
+        <div className="flex items-center gap-2">
+          <ShiftStatus status={data.status} />
+          {label && (
+            <div className="hidden h-fit justify-center rounded-full bg-elementPrimary px-2 py-0.5">
+              <span className="text-xs font-medium text-gray-100">{label}</span>
+            </div>
+          )}
+          <h1 className=" text-xl font-semibold">Ca - {data.shift_number}</h1>
+        </div>
         <div className="flex items-center gap-2">
           <div>
             <span className="text-base font-medium">
@@ -33,11 +42,14 @@ export const ShiftCard = ({ data }: ShiftCardProps) => {
             <div className="hidden md:block">
               <label>Người được giao:</label>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full border border-gray-200 p-2">
-                <img alt="assign_user" src={DefaultAvt} />
+            <div className="flex flex-1 items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full border border-gray-200 p-2">
+                  <img alt="assign_user" src={DefaultAvt} />
+                </div>
+                <h6>Nguyễn Văn A</h6>
               </div>
-              <h6>Nguyễn Văn A</h6>
+              <ShiftStatus status={data.status} isShowDetail />
             </div>
           </div>
           <div className="flex flex-col gap-10">

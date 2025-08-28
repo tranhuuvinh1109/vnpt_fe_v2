@@ -8,8 +8,10 @@ export const getAllShift = async () => {
   return res.data;
 };
 
-export const getAllShiftOrderByDate = async () => {
-  const res: GetAllShiftOrderByDateResponseType = await axiosClient.get(API.GET_ALL_SHIFT_ORDER_BY_DATE);
+export const getAllShiftOrderByDate = async ({ from, to }: { from?: string; to?: string }) => {
+  const res: GetAllShiftOrderByDateResponseType = await axiosClient.get(API.GET_ALL_SHIFT_ORDER_BY_DATE, {
+    params: { from, to },
+  });
 
   return res.data;
 };
