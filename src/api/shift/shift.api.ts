@@ -1,6 +1,11 @@
 import { API } from "../../constant";
 import axiosClient from "../axiosInstant";
-import { GetAllShiftOrderByDateResponseType, GetAllShiftResponseType } from "./shift.type";
+import {
+  CreateShiftForDayRequestType,
+  CreateShiftForDayResponseType,
+  GetAllShiftOrderByDateResponseType,
+  GetAllShiftResponseType,
+} from "./shift.type";
 
 export const getAllShift = async () => {
   const res: GetAllShiftResponseType = await axiosClient.get(API.GET_ALL_SHIFT);
@@ -8,8 +13,15 @@ export const getAllShift = async () => {
   return res.data;
 };
 
-export const getAllShiftOrderByDate = async () => {
-  const res: GetAllShiftOrderByDateResponseType = await axiosClient.get(API.GET_ALL_SHIFT_ORDER_BY_DATE);
+export const getAllShiftOrderByDate = async ({ from, to }: { from?: string; to?: string }) => {
+  const res: GetAllShiftOrderByDateResponseType = await axiosClient.get(API.GET_ALL_SHIFT_ORDER_BY_DATE, {
+    params: { from, to },
+  });
 
+  return res.data;
+};
+
+export const createShiftForDay = async (params: CreateShiftForDayRequestType) => {
+  const res: CreateShiftForDayResponseType = await axiosClient.post(API.CREATE_SHIFT_FOLLOW_DAY, params);
   return res.data;
 };

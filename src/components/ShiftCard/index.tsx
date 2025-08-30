@@ -1,22 +1,37 @@
 import dayjs from "dayjs";
 import { SquareChevronDown, SquareMinus } from "lucide-react";
 import { useState } from "react";
+import Select from "react-select";
+import { useGetAllMember } from "../../api/member";
 import DefaultAvt from "../../assets/images/default-avatar.png";
 import { ShiftDetailType } from "../../type";
-import { ShiftInfo } from "./components";
+import { ShiftInfo, ShiftStatus } from "./components";
 
 type ShiftCardProps = {
   data: ShiftDetailType;
+  label?: string;
 };
 
-export const ShiftCard = ({ data }: ShiftCardProps) => {
+export const ShiftCard = ({ data, label }: ShiftCardProps) => {
+  const { data: allMember } = useGetAllMember();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleShift = () => setIsOpen((pre) => !pre);
+
+  const options = allMember ? allMember?.map((item) => ({ value: item._id, label: item.email })) : [];
+
   return (
     <div className="rounded-lg  bg-white p-2 shadow-2xl">
       <div className="flex items-center justify-between hover:cursor-pointer  " onClick={toggleShift}>
-        <h1 className="text-xl font-semibold">Ca - {data.shift_number}</h1>
+        <div className="flex items-center gap-2">
+          <ShiftStatus status={data.status} />
+          {label && (
+            <div className="hidden h-fit justify-center rounded-full bg-elementPrimary px-2 py-0.5">
+              <span className="text-xs font-medium text-gray-100">{label}</span>
+            </div>
+          )}
+          <h1 className=" text-xl font-semibold">Ca - {data.shift_number}</h1>
+        </div>
         <div className="flex items-center gap-2">
           <div>
             <span className="text-base font-medium">
@@ -29,21 +44,41 @@ export const ShiftCard = ({ data }: ShiftCardProps) => {
 
       {isOpen && (
         <div className="mt-2 border-t border-t-slate-400 py-2">
-          <div className="flex items-center gap-2">
-            <div className="hidden md:block">
-              <label>Người được giao:</label>
-            </div>
+          {data.approved ? (
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full border border-gray-200 p-2">
-                <img alt="assign_user" src={DefaultAvt} />
+              <div className="hidden md:block">
+                <label>Người được giao:</label>
               </div>
-              <h6>Nguyễn Văn A</h6>
+              <div className="flex flex-1 items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-full border border-gray-200 p-2">
+                    <img alt="assign_user" src={DefaultAvt} />
+                  </div>
+                  <h6>Nguyễn Văn A</h6>
+                </div>
+                <ShiftStatus status={data.status} isShowDetail />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="block">
+                <label className="text-xs">Người được giao:</label>
+              </div>
+              <div className="flex flex-1 items-center justify-between">
+                <Select options={options} className="w-full" />
+              </div>
+            </div>
+          )}
           <div className="flex flex-col gap-10">
-            {data.infor_pre && <ShiftInfo data={data.infor_pre} title="Thông tin ca trước" />}
-            {data.infor_during && <ShiftInfo data={data.infor_during} title="Thông tin quá trình" />}
-            {data.infor_exist && <ShiftInfo data={data.infor_exist} title="Thông tin tồn đọng" />}
+            {data.infor_pre && (
+              <ShiftInfo data={data.infor_pre} title="Thông tin ca trước" isEditMode={!data.approved} />
+            )}
+            {data.infor_during && (
+              <ShiftInfo data={data.infor_during} title="Thông tin quá trình" isEditMode={!data.approved} />
+            )}
+            {data.infor_exist && (
+              <ShiftInfo data={data.infor_exist} title="Thông tin tồn đọng" isEditMode={!data.approved} />
+            )}
           </div>
         </div>
       )}

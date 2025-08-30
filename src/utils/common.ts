@@ -2,7 +2,7 @@ import { addDays, format, startOfWeek } from "date-fns";
 import { DateItemType } from "../type";
 
 export function getCurrentWeekDays(date: Date = new Date()): DateItemType[] {
-  const start = startOfWeek(date, { weekStartsOn: 1 });
+  const start = startOfWeek(date, { weekStartsOn: 0 });
   const days = [];
 
   for (let i = 0; i < 7; i++) {
@@ -15,4 +15,20 @@ export function getCurrentWeekDays(date: Date = new Date()): DateItemType[] {
   }
 
   return days;
+}
+
+export function localISOString(date: Date) {
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+}
+
+export function toISOWithTimezone(date: Date, offsetHours = 7) {
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+  const localTime = new Date(utc + offsetHours * 3600000);
+  return localTime.toISOString();
+}
+
+export function toLocalISOString(date: Date) {
+  const tzOffset = 7 * 60 * 60000;
+  const localTime = new Date(date.getTime() + tzOffset);
+  return localTime.toISOString();
 }
