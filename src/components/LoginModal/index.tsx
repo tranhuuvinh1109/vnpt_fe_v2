@@ -1,5 +1,6 @@
 import { MonitorCheck } from "lucide-react";
 import { useState } from "react";
+import Toast from "react-hot-toast";
 import { useSignIn } from "../../api";
 import Logo from "../../assets/images/logo.png";
 import { E_LOCAL_STORAGE } from "../../enum";
@@ -33,9 +34,11 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       onSuccess: (data) => {
         localStorage.setItem(E_LOCAL_STORAGE.APP_NAME, JSON.stringify(data));
         setUser(data);
+        Toast.success("Đăng nhập thành công!");
       },
       onError: (e) => {
         console.log(e);
+        Toast.error("Đăng nhập thất bại!");
       },
     });
   };

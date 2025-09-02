@@ -75,7 +75,9 @@ const HomePage = () => {
         </div>
       );
 
-    return item.shifts.map((shift) => <ShiftCard data={shift} label={dateActived.label} key={shift._id} />);
+    return item.shifts
+      .sort((a, b) => a.shift_number - b.shift_number)
+      .map((shift) => <ShiftCard data={shift} label={dateActived.label} key={shift._id} />);
   }, [shiftData, dateActived]);
 
   useEffect(() => {

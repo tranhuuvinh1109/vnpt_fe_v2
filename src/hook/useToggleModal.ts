@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 
-const useToggleModal = (defaultValue = false): [state: boolean, setState: { on: () => void; off: () => void }] => {
+export const useToggleModal = (
+  defaultValue = false
+): [state: boolean, setState: { on: () => void; off: () => void }] => {
   const [state, setState] = useState(defaultValue);
 
   const on = useCallback(() => setState(true), []);
@@ -10,5 +12,3 @@ const useToggleModal = (defaultValue = false): [state: boolean, setState: { on: 
 
   return [state, modalHandler];
 };
-
-export default useToggleModal;

@@ -1,4 +1,4 @@
-import { CalendarSearch, FileSliders, Network, NotebookPen } from "lucide-react";
+import { CalendarSearch, FileSliders, Network, NotebookPen, UserRound } from "lucide-react";
 import { SidebarItemType } from "../type";
 
 export const SIDEBARS: SidebarItemType[] = [
@@ -21,5 +21,10 @@ export const SIDEBARS: SidebarItemType[] = [
     label: "Phụ lục tồn tại",
     url: "existing-appendix", // Phụ lục tồn tại
     icon: NotebookPen,
+  },
+  {
+    label: "Tài khoản",
+    url: "account", // Phụ lục tồn tại
+    icon: UserRound,
   },
 ];
