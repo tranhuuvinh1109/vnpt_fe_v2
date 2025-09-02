@@ -118,7 +118,12 @@ const HomePage = () => {
         <div className="flex items-center justify-between ">
           <div className="scrollXCustom flex h-fit flex-1 gap-2 overflow-x-auto pb-2 ">
             {days.map((item) => (
-              <DateCard data={item} isActive={dateActived?.label === item.label} onClick={handleClickDateCard} />
+              <DateCard
+                data={item}
+                key={item.label}
+                isActive={dateActived?.label === item.label}
+                onClick={handleClickDateCard}
+              />
             ))}
           </div>
           <Popover className="relative hidden md:block">

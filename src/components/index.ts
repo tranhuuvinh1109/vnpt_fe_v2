@@ -2,6 +2,7 @@ export * from "./Container";
 export * from "./DateCard";
 export * from "./Layout";
 export * from "./Loading";
+export * from "./Modal";
 export * from "./ShiftCard";
 export * from "./Sidebar";
 export * from "./WeekPicker";

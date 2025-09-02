@@ -14,6 +14,7 @@ const BottomTab = () => {
               to={item.url}
               className={`flex-1 rounded-md text-gray-600 hover:bg-elementPrimary hover:text-white ${pathActive === item.url ? " !text-elementPrimary " : ""}`}
               title={item.label}
+              key={item.url}
             >
               <div className="flex flex-col items-center justify-center gap-1 py-2 ">
                 <Icon size={20} />
