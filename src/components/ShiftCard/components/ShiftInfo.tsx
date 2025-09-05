@@ -30,7 +30,7 @@ export const ShiftInfo = ({ data, title, isEditMode = false }: ShiftInfoProps) =
 
   return (
     <div>
-      <div className="flex items-center gap-2 px-2">
+      <div className="flex items-center gap-2 p-2">
         <div className="h-0.5 flex-1 bg-slate-500" />
         <h1 className="text-xl font-medium">{title}</h1>
         <div className="h-0.5 flex-1 bg-slate-500" />

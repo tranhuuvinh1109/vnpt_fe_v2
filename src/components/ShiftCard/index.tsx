@@ -1,24 +1,20 @@
 import dayjs from "dayjs";
 import { SquareChevronDown, SquareMinus } from "lucide-react";
 import { useState } from "react";
-import Select from "react-select";
-import { useGetAllMember } from "../../api/member";
 import DefaultAvt from "../../assets/images/default-avatar.png";
 import { ShiftDetailType } from "../../type";
-import { ShiftInfo, ShiftStatus } from "./components";
+import { CreateShiftStep, ShiftInfo, ShiftStatus } from "./components";
 
 type ShiftCardProps = {
   data: ShiftDetailType;
   label?: string;
+  isEditMode?: boolean;
 };
 
-export const ShiftCard = ({ data, label }: ShiftCardProps) => {
-  const { data: allMember } = useGetAllMember();
+export const ShiftCard = ({ data, label, isEditMode = false }: ShiftCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleShift = () => setIsOpen((pre) => !pre);
-
-  const options = allMember ? allMember?.map((item) => ({ value: item._id, label: item.email })) : [];
 
   return (
     <div className="rounded-lg  bg-white p-2 shadow-2xl">
@@ -42,33 +38,26 @@ export const ShiftCard = ({ data, label }: ShiftCardProps) => {
         </div>
       </div>
 
-      {isOpen && (
-        <div className="mt-2 border-t border-t-slate-400 py-2">
-          {data.approved ? (
-            <div className="flex items-center gap-2">
-              <div className="hidden md:block">
-                <label>Người được giao:</label>
-              </div>
-              <div className="flex flex-1 items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full border border-gray-200 p-2">
-                    <img alt="assign_user" src={DefaultAvt} />
-                  </div>
-                  <h6>Nguyễn Văn A</h6>
+      <div className={`${isOpen ? "" : "hidden"} mt-2 border-t border-t-slate-400 py-2`}>
+        {data.approved ? (
+          <div className="flex items-center gap-2">
+            <div className="hidden md:block">
+              <label>Người được giao:</label>
+            </div>
+            <div className="flex flex-1 items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full border border-gray-200 p-2">
+                  <img alt="assign_user" src={DefaultAvt} />
                 </div>
-                <ShiftStatus status={data.status} isShowDetail />
+                <h6>Nguyễn Văn A</h6>
               </div>
+              <ShiftStatus status={data.status} isShowDetail />
             </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <div className="block">
-                <label className="text-xs">Người được giao:</label>
-              </div>
-              <div className="flex flex-1 items-center justify-between">
-                <Select options={options} className="w-full" />
-              </div>
-            </div>
-          )}
+          </div>
+        ) : (
+          <CreateShiftStep data={data} />
+        )}
+        {!isEditMode && (
           <div className="flex flex-col gap-10">
             {data.infor_pre && (
               <ShiftInfo data={data.infor_pre} title="Thông tin ca trước" isEditMode={!data.approved} />
@@ -80,8 +69,8 @@ export const ShiftCard = ({ data, label }: ShiftCardProps) => {
               <ShiftInfo data={data.infor_exist} title="Thông tin tồn đọng" isEditMode={!data.approved} />
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
