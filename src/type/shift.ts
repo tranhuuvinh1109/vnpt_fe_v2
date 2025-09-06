@@ -23,7 +23,7 @@ export type ShiftType = {
 
 export type ShiftDetailType = {
   _id: string;
-  assign_user: string | null;
+  assign_user: UserType[] | null;
   pre_shift: string | null;
   next_shift: string | null;
   date: string;

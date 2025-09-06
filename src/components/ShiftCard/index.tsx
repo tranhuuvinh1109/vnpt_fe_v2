@@ -9,9 +9,10 @@ type ShiftCardProps = {
   data: ShiftDetailType;
   label?: string;
   isEditMode?: boolean;
+  refetch?: () => {};
 };
 
-export const ShiftCard = ({ data, label, isEditMode = false }: ShiftCardProps) => {
+export const ShiftCard = ({ data, label, isEditMode = false, refetch }: ShiftCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleShift = () => setIsOpen((pre) => !pre);
@@ -55,7 +56,7 @@ export const ShiftCard = ({ data, label, isEditMode = false }: ShiftCardProps) =
             </div>
           </div>
         ) : (
-          <CreateShiftStep data={data} />
+          <CreateShiftStep data={data} refetch={refetch} />
         )}
         {!isEditMode && (
           <div className="flex flex-col gap-10">

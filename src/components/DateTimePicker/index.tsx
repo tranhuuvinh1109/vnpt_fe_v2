@@ -1,19 +1,17 @@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { PickerValue } from "@mui/x-date-pickers/internals";
+import { DateTimePicker, DateTimePickerProps } from "@mui/x-date-pickers/DateTimePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-type MyDateTimePickerProps = {
-  label?: string;
-  value?: PickerValue;
+type MyDateTimePickerProps = DateTimePickerProps & {
   className?: string;
 };
-export function MyDateTimePicker({ label, value, className }: MyDateTimePickerProps) {
+
+export function MyDateTimePicker({ ...props }: MyDateTimePickerProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={["DateTimePicker"]}>
-        <DateTimePicker label={label} value={value} className={className} />
+        <DateTimePicker {...props} />
       </DemoContainer>
     </LocalizationProvider>
   );

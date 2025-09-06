@@ -7,7 +7,7 @@ import { useAppContext } from "../../provider/context";
 
 const Sidebar = () => {
   const { handleSignOut } = useSignOut();
-  const { pathActive } = useAppContext();
+  const { pathActive, setPathActive } = useAppContext();
 
   return (
     <div className="hidden h-screen w-72 flex-col p-2 md:flex">
@@ -21,6 +21,7 @@ const Sidebar = () => {
             <Link
               key={item.url}
               to={item.url}
+              onClick={() => setPathActive(item.url)}
               className={`flex cursor-pointer items-center gap-2 rounded-xl p-3 text-gray-600 hover:bg-elementPrimary hover:text-white ${item.url === pathActive ? "  bg-elementPrimary !text-white" : ""}`}
             >
               <Icon fontSize={24} />

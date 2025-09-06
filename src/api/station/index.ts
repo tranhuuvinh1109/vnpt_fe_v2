@@ -6,5 +6,6 @@ export const useGetAllStation = () => {
   return useQuery({
     queryKey: [QUERY_KEY.GET_ALL_STATION],
     queryFn: getAllStation,
+    refetchOnWindowFocus: false,
   });
 };

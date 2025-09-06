@@ -5,6 +5,8 @@ import {
   CreateShiftForDayResponseType,
   GetAllShiftOrderByDateResponseType,
   GetAllShiftResponseType,
+  UpdateShiftForDayRequestType,
+  UpdateShiftForDayResponseType,
 } from "./shift.type";
 
 export const getAllShift = async () => {
@@ -23,5 +25,10 @@ export const getAllShiftOrderByDate = async ({ from, to }: { from?: string; to?:
 
 export const createShiftForDay = async (params: CreateShiftForDayRequestType) => {
   const res: CreateShiftForDayResponseType = await axiosClient.post(API.CREATE_SHIFT_FOLLOW_DAY, params);
+  return res.data;
+};
+
+export const updateShiftForDay = async (params: UpdateShiftForDayRequestType) => {
+  const res: UpdateShiftForDayResponseType = await axiosClient.patch(API.UPDATE_SHIFT_FOLLOW_DAY(params._id), params);
   return res.data;
 };

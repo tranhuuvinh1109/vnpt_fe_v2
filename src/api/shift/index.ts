@@ -1,10 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { API } from "../../constant";
 import { MUTATION_KEY, QUERY_KEY } from "../../enum";
 import { ShiftType } from "../../type";
-import { createShiftForDay, getAllShift, getAllShiftOrderByDate } from "./shift.api";
-import { CreateShiftForDayRequestType } from "./shift.type";
+import { createShiftForDay, getAllShift, getAllShiftOrderByDate, updateShiftForDay } from "./shift.api";
+import { CreateShiftForDayRequestType, UpdateShiftForDayRequestType } from "./shift.type";
 
 export const useGetAllShift = () => {
   return useQuery({
@@ -27,26 +26,9 @@ export const useCreateShiftForDay = () => {
   });
 };
 
-export const useCreateShiftForDayTemp = () => {
-  const createShiftForDay = async (params: CreateShiftForDayRequestType) => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}${API.CREATE_SHIFT_FOLLOW_DAY}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Add authorization if needed
-        // 'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(params),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
-    }
-
-    return response.json();
-  };
-  return useMutation<ShiftType[], AxiosError, CreateShiftForDayRequestType>({
-    mutationFn: createShiftForDay,
-    mutationKey: [MUTATION_KEY.CREATE_SHIFT_FOLLOW_DAY],
+export const useUpdateShiftForDay = () => {
+  return useMutation<ShiftType, AxiosError, UpdateShiftForDayRequestType>({
+    mutationFn: updateShiftForDay,
+    mutationKey: [MUTATION_KEY.UPDATE_SHIFT_FOLLOW_DAY],
   });
 };

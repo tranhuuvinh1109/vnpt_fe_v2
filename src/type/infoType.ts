@@ -5,5 +5,7 @@ export type InfoType = {
   type?: string;
   createdAt?: string;
   updatedAt?: string;
+  file?: File;
+  previewUrl?: string;
   __v?: number;
 };
