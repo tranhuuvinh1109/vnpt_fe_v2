@@ -3,7 +3,8 @@ import { SIDEBARS } from "../../constant";
 import { useAppContext } from "../../provider/context";
 
 const BottomTab = () => {
-  const { pathActive } = useAppContext();
+  const { pathActive, setPathActive } = useAppContext();
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-10 border-t border-t-overlay bg-elementBgSecondary py-1 md:hidden">
       <div className=" flex gap-2 px-1">
@@ -12,9 +13,10 @@ const BottomTab = () => {
           return (
             <Link
               to={item.url}
-              className={`flex-1 rounded-md text-gray-600 hover:bg-elementPrimary hover:text-white ${pathActive === item.url ? " !text-elementPrimary " : ""}`}
+              className={`flex-1 rounded-md text-gray-600 hover:bg-elementPrimary hover:text-white ${pathActive === item.url ? " !bg-elementPrimary !text-white " : ""}`}
               title={item.label}
               key={item.url}
+              onClick={() => setPathActive(item.url)}
             >
               <div className="flex flex-col items-center justify-center gap-1 py-2 ">
                 <Icon size={20} />

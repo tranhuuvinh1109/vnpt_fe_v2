@@ -110,7 +110,7 @@ export function CreateShiftStep({ data }: CreateShiftStepProps) {
         <ShiftInfo data={infoData.infor_exist} title="Thông tin tồn đọng" isEditMode />
       </div>
     );
-  }, [activeStep, infoData]);
+  }, [activeStep, infoData, options]);
   return (
     <StyledEngineProvider injectFirst>
       <div className="w-full">
