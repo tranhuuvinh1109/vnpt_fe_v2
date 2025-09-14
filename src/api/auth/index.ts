@@ -13,7 +13,7 @@ export const useSignIn = () => {
 };
 
 export const useMe = ({ enabled }: { enabled?: boolean }) => {
-  return useQuery({
+  return useQuery<UserType, AxiosError>({
     queryFn: getProfile,
     queryKey: [QUERY_KEY.ME, enabled],
     enabled: enabled,
