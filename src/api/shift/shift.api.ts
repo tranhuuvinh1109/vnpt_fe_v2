@@ -32,3 +32,14 @@ export const updateShiftForDay = async (params: UpdateShiftForDayRequestType) =>
   const res: UpdateShiftForDayResponseType = await axiosClient.patch(API.UPDATE_SHIFT_FOLLOW_DAY(params._id), params);
   return res.data;
 };
+
+export const updateShiftForDayFormData = async (formData: FormData) => {
+  const res: UpdateShiftForDayResponseType = await axiosClient.patch(
+    API.UPDATE_SHIFT_FOLLOW_DAY(formData.get("_id") as string),
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+  return res.data;
+};

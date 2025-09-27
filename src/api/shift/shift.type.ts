@@ -1,4 +1,4 @@
-import { InfoType, ShiftDetailOrderByDateType, ShiftDetailType, ShiftType } from "../../type";
+import { InfoType, ShiftDetailOrderByDateType, ShiftDetailType, ShiftType, UserType } from "../../type";
 import { ResponseType } from "../common.type";
 
 export type GetAllShiftResponseType = ResponseType<ShiftDetailType[]>;
@@ -16,13 +16,14 @@ export type CreateShiftForDayResponseType = ResponseType<ShiftType[]>;
 export type InfoUpdateRequestType = {
   _id: string;
   note?: string;
-  image?: string;
+  image?: string | File;
 };
 
 export type DataShiftForDayRequestType = {
   _id: string;
-  station: string;
-  assign: string[];
+  station: { value: string; label: string };
+  assigned_user: UserType[];
+  assign: { value: string; label: string }[];
   status?: string;
   approved?: boolean;
   start_time: string;

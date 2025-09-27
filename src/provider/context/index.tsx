@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { SIDEBARS } from "../../constant";
 import { UserType } from "../../type";
 
@@ -25,6 +25,11 @@ export const AppContext = ({ children }: AppContextProps) => {
   const [pathActive, setPathActive] = useState(SIDEBARS[0].url);
   const [user, setUser] = useState<UserType | undefined>();
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    setIsOpenLoginModal(false);
+  }, [user]);
 
   return (
     <APP_CONTEXT.Provider

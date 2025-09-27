@@ -87,7 +87,7 @@ export const ShiftInfo = ({ data, title, isEditMode = false, setInfoData, name }
           )}
         </div>
 
-        {isEditMode ? (
+        {!data?.image ? (
           <div className={`h-36 w-full overflow-hidden rounded-lg border md:h-60 ${isEditMode ? "md:flex-1" : ""}`}>
             {data.previewUrl ? (
               <div className="relative h-full w-full">
@@ -111,12 +111,10 @@ export const ShiftInfo = ({ data, title, isEditMode = false, setInfoData, name }
             <input type="file" accept="image/*" onChange={handleFileChange} id={`image-${name}`} className="hidden" />
           </div>
         ) : (
-          data.image?.startsWith("http") && (
-            <div className="flex flex-col gap-1">
-              <h2 className="text-sm font-medium md:text-base">Hình ảnh:</h2>
-              <img alt="details" src={data.image} className="mx-auto max-w-48 rounded-xl md:max-w-96" />
-            </div>
-          )
+          <div className="flex flex-col gap-1">
+            <h2 className="text-sm font-medium md:text-base">Hình ảnh:</h2>
+            <img alt="details" src={data.image} className="mx-auto h-48 max-w-48 rounded-xl object-cover md:max-w-96" />
+          </div>
         )}
       </div>
     </div>

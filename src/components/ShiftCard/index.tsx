@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { SquareChevronDown, SquareMinus } from "lucide-react";
+import { Check, Pencil, SquareChevronDown, SquareMinus } from "lucide-react";
 import { useState } from "react";
 import DefaultAvt from "../../assets/images/default-avatar.png";
 import { ShiftDetailType } from "../../type";
@@ -8,18 +8,22 @@ import { CreateShiftStep, ShiftInfo, ShiftStatus } from "./components";
 type ShiftCardProps = {
   data: ShiftDetailType;
   label?: string;
-  isEditMode?: boolean;
   refetch?: () => {};
 };
 
-export const ShiftCard = ({ data, label, isEditMode = false, refetch }: ShiftCardProps) => {
+export const ShiftCard = ({ data, label, refetch }: ShiftCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const toggleMode = () => {
+    setIsEditMode((pre) => !pre);
+  };
 
   const toggleShift = () => setIsOpen((pre) => !pre);
 
   return (
     <div className="rounded-lg  bg-white p-2 shadow-2xl">
-      <div className="flex items-center justify-between hover:cursor-pointer  " onClick={toggleShift}>
+      <div className="flex items-center justify-between hover:cursor-pointer" onClick={toggleShift}>
         <div className="flex items-center gap-2">
           <ShiftStatus status={data.status} />
           {label && (
@@ -40,7 +44,16 @@ export const ShiftCard = ({ data, label, isEditMode = false, refetch }: ShiftCar
       </div>
 
       <div className={`${isOpen ? "" : "hidden"} mt-2 border-t border-t-slate-400 py-2`}>
-        {data.approved ? (
+        <div className="flex justify-end pb-2">
+          <button
+            className="flex min-w-28 items-center justify-center gap-2 rounded bg-slate-200 p-1.5 text-xs font-medium hover:bg-slate-300 hover:text-slate-700"
+            onClick={toggleMode}
+          >
+            {isEditMode ? "Lưu" : "Chỉnh sửa"}
+            {isEditMode ? <Check size={20} /> : <Pencil size={20} />}
+          </button>
+        </div>
+        {!isEditMode ? (
           <div className="flex items-center gap-2">
             <div className="hidden md:block">
               <label>Người được giao:</label>
@@ -60,15 +73,9 @@ export const ShiftCard = ({ data, label, isEditMode = false, refetch }: ShiftCar
         )}
         {!isEditMode && (
           <div className="flex flex-col gap-10">
-            {data.infor_pre && (
-              <ShiftInfo data={data.infor_pre} title="Thông tin ca trước" isEditMode={!data.approved} />
-            )}
-            {data.infor_during && (
-              <ShiftInfo data={data.infor_during} title="Thông tin quá trình" isEditMode={!data.approved} />
-            )}
-            {data.infor_exist && (
-              <ShiftInfo data={data.infor_exist} title="Thông tin tồn đọng" isEditMode={!data.approved} />
-            )}
+            {data.infor_pre && <ShiftInfo data={data.infor_pre} title="Thông tin ca trước" />}
+            {data.infor_during && <ShiftInfo data={data.infor_during} title="Thông tin quá trình" />}
+            {data.infor_exist && <ShiftInfo data={data.infor_exist} title="Thông tin tồn đọng" />}
           </div>
         )}
       </div>

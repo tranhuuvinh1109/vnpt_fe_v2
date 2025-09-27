@@ -19,7 +19,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     password: "",
   });
 
-  const { setUser } = useAppContext();
+  const { setUser, setIsOpenLoginModal } = useAppContext();
 
   const { mutate: signIn, isPending: isPendingSignIn } = useSignIn();
 
@@ -34,6 +34,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       onSuccess: (data) => {
         localStorage.setItem(E_LOCAL_STORAGE.APP_NAME, JSON.stringify(data));
         setUser(data);
+        setIsOpenLoginModal(false);
         Toast.success("Đăng nhập thành công!");
       },
       onError: (e) => {

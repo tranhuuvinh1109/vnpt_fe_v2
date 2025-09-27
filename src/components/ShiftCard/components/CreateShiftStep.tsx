@@ -7,14 +7,14 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import { useGetAllMember } from "../../../api/member";
 
+import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import { ShiftInfo, ShiftStatus } from ".";
 import { LoadingPage, MyDateTimePicker } from "../..";
-import { useGetAllStation, useUpdateShiftForDay } from "../../../api";
+import { useGetAllStation, useUpdateShiftForDayFormData } from "../../../api";
 import { DataShiftForDayRequestType } from "../../../api/shift/shift.type";
 import { ShiftDetailType } from "../../../type";
-import { convertAndValidateUpdateRequest } from "../../../utils";
 const steps = ["Phân công", "Nhận ca", "Hiện tại", "Tồn đọng"];
 
 type CreateShiftStepProps = {
@@ -25,10 +25,24 @@ type CreateShiftStepProps = {
 export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
   const [activeStep, setActiveStep] = useState(0);
 
+  const { data: allMember } = useGetAllMember();
+  const { data: allStation } = useGetAllStation();
+
+  const { mutate: updateShift, isPending: isPendingUpdateShift } = useUpdateShiftForDayFormData();
+
+  const memberOptions = allMember ? allMember?.map((item) => ({ value: item._id ?? "", label: item.email })) : [];
+  const stationOptions = allStation ? allStation?.map((item) => ({ value: item._id ?? "", label: item.address })) : [];
+
+  const station = stationOptions.find((item) => item.value === data.station._id);
+
   const intiData: DataShiftForDayRequestType = {
     _id: data._id ?? "",
-    station: data.station._id ?? "",
-    assign: [],
+    station: {
+      value: data.station._id ?? "",
+      label: station ? station.label : "",
+    },
+    assigned_user: data?.assign_user ? data?.assign_user : [],
+    assign: data?.assign_user ? data?.assign_user.map((item) => ({ value: item._id ?? "", label: item.email })) : [],
     infor_pre: data.infor_pre,
     infor_during: data.infor_during,
     infor_exist: data.infor_exist,
@@ -37,14 +51,6 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
   };
 
   const [infoData, setInfoData] = useState<DataShiftForDayRequestType>(intiData);
-
-  const { data: allMember } = useGetAllMember();
-  const { data: allStation } = useGetAllStation();
-
-  const { mutate: updateShift, isPending: isPendingUpdateShift } = useUpdateShiftForDay();
-
-  const memberOptions = allMember ? allMember?.map((item) => ({ value: item._id, label: item.email })) : [];
-  const stationOptions = allStation ? allStation?.map((item) => ({ value: item._id, label: item.address })) : [];
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -60,20 +66,55 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
   };
 
   const handleSubmit = async () => {
-    const payload = await convertAndValidateUpdateRequest(infoData);
+    try {
+      const formData = new FormData();
 
-    if (!payload) return;
+      formData.append("_id", infoData._id);
+      formData.append("station", infoData.station.value);
+      formData.append("start_time", infoData.start_time);
+      formData.append("end_time", infoData.end_time);
 
-    updateShift(payload, {
-      onSuccess: () => {
-        toast.success("Cập nhật dữ liệu ca thành công");
-        refetch && refetch();
-      },
-      onError: (e) => {
-        toast.error("Cập nhật dữ liệu ca thất bại");
-        console.log(e);
-      },
-    });
+      formData.append("assign", JSON.stringify(infoData.assign.map((item) => item.value ?? "")));
+      if (infoData.status) formData.append("status", infoData.status);
+      if (typeof infoData.approved !== "undefined") {
+        formData.append("approved", String(infoData.approved));
+      }
+
+      // --- infor_pre ---
+      if (infoData.infor_pre?._id) formData.append("infor_pre_id", infoData.infor_pre._id);
+      if (infoData.infor_pre?.note) formData.append("infor_pre_note", infoData.infor_pre.note);
+      if (infoData.infor_pre?.file) {
+        formData.append("infor_pre_image", infoData.infor_pre.file);
+      }
+
+      // --- infor_during ---
+      if (infoData.infor_during?._id) formData.append("infor_during_id", infoData.infor_during._id);
+      if (infoData.infor_during?.note) formData.append("infor_during_note", infoData.infor_during.note);
+      if (infoData.infor_during?.file) {
+        formData.append("infor_during_image", infoData.infor_during.file);
+      }
+
+      // --- infor_exist ---
+      if (infoData.infor_exist?._id) formData.append("infor_exist_id", infoData.infor_exist._id);
+      if (infoData.infor_exist?.note) formData.append("infor_exist_note", infoData.infor_exist.note);
+      if (infoData.infor_exist?.file) {
+        formData.append("infor_exist_image", infoData.infor_exist.file);
+      }
+
+      updateShift(formData, {
+        onSuccess: () => {
+          toast.success("Cập nhật dữ liệu ca thành công");
+          refetch && refetch();
+        },
+        onError: (e) => {
+          toast.error("Cập nhật dữ liệu ca thất bại");
+          console.log(e);
+        },
+      });
+    } catch (error) {
+      console.error("handleSubmit error:", error);
+      toast.error("Có lỗi khi chuẩn bị dữ liệu gửi lên server");
+    }
   };
 
   const renderStepContent = useMemo(() => {
@@ -89,9 +130,10 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
               <Select
                 options={stationOptions}
                 onChange={(e) => {
-                  setInfoData((pre) => (e?.value ? { ...pre, station: e.value } : pre));
+                  setInfoData((pre) => (e?.value ? { ...pre, station: e } : pre));
                 }}
                 className="w-full"
+                value={infoData.station}
                 placeholder={"Chọn trạm..."}
                 styles={{
                   menu: (baseStyles) => ({
@@ -115,9 +157,10 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
                 onChange={(e) => {
                   setInfoData((pre) => ({
                     ...pre,
-                    assign: e.map((item) => item.value ?? ""),
+                    assign: e.map((item) => item),
                   }));
                 }}
+                value={infoData.assign}
                 placeholder={"Chọn người..."}
                 styles={{
                   menu: (baseStyles) => ({
@@ -132,6 +175,7 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             <div className="flex-1">
               <MyDateTimePicker
                 label="Thời gian bắt đầu"
+                value={dayjs(infoData.start_time)}
                 onChange={(value) => {
                   if (value) {
                     setInfoData((pre) => ({ ...pre, start_time: value.format() }));
@@ -142,6 +186,7 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             <div className="flex-1">
               <MyDateTimePicker
                 label="Thời gian kết thúc"
+                value={dayjs(infoData.end_time)}
                 onChange={(value) => {
                   if (value) {
                     setInfoData((pre) => ({ ...pre, end_time: value.format() }));
@@ -156,7 +201,6 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             data={infoData.infor_pre}
             key={`infor_pre_${activeStep}`}
             title="Thông tin nhận ca"
-            isEditMode
             name="infor_pre"
             setInfoData={setInfoData}
           />
@@ -166,7 +210,6 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             data={infoData.infor_during}
             key={`infor_during_${activeStep}`}
             title="Thông tin hiện tại"
-            isEditMode
             name="infor_during"
             setInfoData={setInfoData}
           />
@@ -176,7 +219,6 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             data={infoData.infor_exist}
             key={`infor_exist_${activeStep}`}
             title="Thông tin tồn đọng"
-            isEditMode
             name="infor_exist"
             setInfoData={setInfoData}
           />

@@ -10,5 +10,6 @@ export const useGetAllMember = () => {
     queryKey: [QUERY_KEY.GET_ALL_MEMBER],
     queryFn: getAllMember,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };

@@ -2,7 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { MUTATION_KEY, QUERY_KEY } from "../../enum";
 import { ShiftDetailOrderByDateType, ShiftDetailType, ShiftType } from "../../type";
-import { createShiftForDay, getAllShift, getAllShiftOrderByDate, updateShiftForDay } from "./shift.api";
+import {
+  createShiftForDay,
+  getAllShift,
+  getAllShiftOrderByDate,
+  updateShiftForDay,
+  updateShiftForDayFormData,
+} from "./shift.api";
 import { CreateShiftForDayRequestType, UpdateShiftForDayRequestType } from "./shift.type";
 
 export const useGetAllShift = () => {
@@ -30,5 +36,12 @@ export const useUpdateShiftForDay = () => {
   return useMutation<ShiftType, AxiosError, UpdateShiftForDayRequestType>({
     mutationFn: updateShiftForDay,
     mutationKey: [MUTATION_KEY.UPDATE_SHIFT_FOLLOW_DAY],
+  });
+};
+
+export const useUpdateShiftForDayFormData = () => {
+  return useMutation<ShiftType, AxiosError, FormData>({
+    mutationFn: updateShiftForDayFormData,
+    mutationKey: [MUTATION_KEY.UPDATE_SHIFT_FOLLOW_DAY_FORM_DATA],
   });
 };
