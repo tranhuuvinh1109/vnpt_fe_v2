@@ -46,11 +46,15 @@ export const ShiftCard = ({ data, label, refetch }: ShiftCardProps) => {
       <div className={`${isOpen ? "" : "hidden"} mt-2 border-t border-t-slate-400 py-2`}>
         <div className="flex justify-end pb-2">
           <button
-            className="flex min-w-28 items-center justify-center gap-2 rounded bg-slate-200 p-1.5 text-xs font-medium hover:bg-slate-300 hover:text-slate-700"
+            className={`flex min-w-28 items-center justify-center gap-2 rounded  px-1.5 py-2 text-xs font-medium  ${
+              isEditMode
+                ? "bg-green-400 text-white hover:bg-green-500"
+                : "bg-slate-200 hover:bg-slate-300 hover:text-slate-700"
+            }`}
             onClick={toggleMode}
           >
             {isEditMode ? "Lưu" : "Chỉnh sửa"}
-            {isEditMode ? <Check size={20} /> : <Pencil size={20} />}
+            {isEditMode ? <Check size={16} /> : <Pencil size={16} />}
           </button>
         </div>
         {!isEditMode ? (

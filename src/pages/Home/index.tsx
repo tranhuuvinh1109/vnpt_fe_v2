@@ -4,9 +4,11 @@ import { Popover } from "@headlessui/react";
 import dayjs, { Dayjs } from "dayjs";
 import { CalendarDays, CalendarPlus2, PackageOpen } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { useCreateShiftForDay, useGetAllShiftOrderByDate } from "../../api";
 import { CreateShiftForDayRequestType } from "../../api/shift/shift.type";
 import { DateCard, LoadingPage, ShiftCard, WeekPicker } from "../../components";
+import Skeleton from "../../components/Skeleton";
 import { DateItemType } from "../../type";
 import { getCurrentWeekDays, localISOString, toLocalISOString } from "../../utils";
 
@@ -18,7 +20,11 @@ const HomePage = () => {
     getCurrentWeekDays(weekValue ? new Date(weekValue?.toISOString()) : new Date())
   );
 
-  const { data: shiftData, refetch: refetchAllShift } = useGetAllShiftOrderByDate({
+  const {
+    data: shiftData,
+    refetch: refetchAllShift,
+    isLoading: isLoadingShift,
+  } = useGetAllShiftOrderByDate({
     from: localISOString(days[0].date),
     to: localISOString(days[6].date),
   });
@@ -49,6 +55,16 @@ const HomePage = () => {
   }, [dateActived]);
 
   const renderShiftByDay = useMemo(() => {
+    if (isLoadingShift) {
+      return (
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-[44px]" />
+          <Skeleton className="h-[44px]" />
+          <Skeleton className="h-[44px]" />
+        </div>
+      );
+    }
+
     if (!shiftData) return null;
 
     const item = shiftData.find((item) => {
@@ -78,7 +94,7 @@ const HomePage = () => {
     return item.shifts
       .sort((a, b) => a.shift_number - b.shift_number)
       .map((shift) => <ShiftCard data={shift} label={dateActived.label} key={shift._id} refetch={refetchAllShift} />);
-  }, [shiftData, dateActived, refetchAllShift]);
+  }, [shiftData, dateActived, refetchAllShift, isLoadingShift]);
 
   useEffect(() => {
     const genDay = getCurrentWeekDays(weekValue ? new Date(weekValue?.toISOString()) : new Date());

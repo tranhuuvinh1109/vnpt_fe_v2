@@ -18,6 +18,10 @@ export default {
         montserrat: ["Montserrat Alternates", "sans-serif"],
       },
       keyframes: {
+        reflect: {
+          "0%": { left: "-100px" },
+          "100%": { left: "calc(100% + 100px)" },
+        },
         slideIn: {
           "0%": { width: "0%" },
           "100%": { width: "25px" },
@@ -94,6 +98,7 @@ export default {
         wave: "wave 1s ease-in-out infinite",
         messageShow: "messageShow 1s ease-in-out",
         messageHidden: "messageHidden 1s ease-in-out",
+        reflect: "reflect 1500ms ease-out infinite",
       },
     },
   },
