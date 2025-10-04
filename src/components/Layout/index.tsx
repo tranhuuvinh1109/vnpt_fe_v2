@@ -10,19 +10,23 @@ import { LoadingPage } from "../Loading";
 import { LoginModal } from "../LoginModal";
 import Sidebar from "../Sidebar";
 const Layout = () => {
-  const { setUser, isOpenLoginModal } = useAppContext();
+  const { setUser, isOpenLoginModal, setIsOpenLoginModal } = useAppContext();
   const localStorageData = localStorage.getItem(E_LOCAL_STORAGE.APP_NAME);
 
-  const { data: userProfile, isPending: isPendingUserProfile } = useMe({ enabled: Boolean(localStorageData) });
+  const { data: userProfile, isPending: isPendingUserProfile } = useMe();
 
   const onClose = () => {
     return;
   };
 
   useEffect(() => {
-    if (!userProfile) return;
+    if (!userProfile) {
+      !isPendingUserProfile && setIsOpenLoginModal(true);
+      return;
+    };
     setUser(userProfile);
-  }, [userProfile]);
+    setIsOpenLoginModal(false);
+  }, [userProfile, isPendingUserProfile]);
 
   return (
     <>

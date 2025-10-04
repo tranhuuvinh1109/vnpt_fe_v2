@@ -20,9 +20,10 @@ const steps = ["Phân công", "Nhận ca", "Hiện tại", "Tồn đọng"];
 type CreateShiftStepProps = {
   data: ShiftDetailType;
   refetch?: () => {};
+  onClose?: () => void;
 };
 
-export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
+export function CreateShiftStep({ data, refetch, onClose }: CreateShiftStepProps) {
   const [activeStep, setActiveStep] = useState(0);
 
   const { data: allMember } = useGetAllMember();
@@ -105,10 +106,12 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
         onSuccess: () => {
           toast.success("Cập nhật dữ liệu ca thành công");
           refetch && refetch();
+          onClose?.();
         },
         onError: (e) => {
           toast.error("Cập nhật dữ liệu ca thất bại");
           console.log(e);
+          onClose?.();
         },
       });
     } catch (error) {
@@ -203,6 +206,7 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             title="Thông tin nhận ca"
             name="infor_pre"
             setInfoData={setInfoData}
+            isEditMode
           />
         </div>
         <div className={`${activeStep === 2 ? "block" : "hidden"}`}>
@@ -212,6 +216,7 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             title="Thông tin hiện tại"
             name="infor_during"
             setInfoData={setInfoData}
+            isEditMode
           />
         </div>
         <div className={`${activeStep === 3 ? "block" : "hidden"}`}>
@@ -221,6 +226,7 @@ export function CreateShiftStep({ data, refetch }: CreateShiftStepProps) {
             title="Thông tin tồn đọng"
             name="infor_exist"
             setInfoData={setInfoData}
+            isEditMode
           />
         </div>
       </>

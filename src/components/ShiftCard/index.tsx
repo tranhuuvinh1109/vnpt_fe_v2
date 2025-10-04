@@ -21,6 +21,11 @@ export const ShiftCard = ({ data, label, refetch }: ShiftCardProps) => {
 
   const toggleShift = () => setIsOpen((pre) => !pre);
 
+  const onReset = () => {
+    setIsOpen(false);
+    setIsEditMode(false);
+  };
+
   return (
     <div className="rounded-lg  bg-white p-2 shadow-2xl">
       <div className="flex items-center justify-between hover:cursor-pointer" onClick={toggleShift}>
@@ -73,7 +78,7 @@ export const ShiftCard = ({ data, label, refetch }: ShiftCardProps) => {
             </div>
           </div>
         ) : (
-          <CreateShiftStep data={data} refetch={refetch} />
+          <CreateShiftStep data={data} refetch={refetch} onClose={onReset} />
         )}
         {!isEditMode && (
           <div className="flex flex-col gap-10">

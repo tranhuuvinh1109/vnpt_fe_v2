@@ -12,11 +12,10 @@ export const useSignIn = () => {
   });
 };
 
-export const useMe = ({ enabled }: { enabled?: boolean }) => {
+export const useMe = () => {
   return useQuery<UserType, AxiosError>({
     queryFn: getProfile,
-    queryKey: [QUERY_KEY.ME, enabled],
-    enabled: enabled,
+    queryKey: [QUERY_KEY.ME],
     refetchOnWindowFocus: false,
   });
 };

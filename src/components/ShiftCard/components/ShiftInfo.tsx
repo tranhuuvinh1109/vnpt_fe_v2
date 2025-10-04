@@ -28,6 +28,7 @@ export const ShiftInfo = ({ data, title, isEditMode = false, setInfoData, name }
           previewUrl: preview,
         },
       }));
+      e.target.value = "";
     }
   };
 

@@ -10,9 +10,9 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const data = localStorage.getItem(E_LOCAL_STORAGE.APP_NAME);
-    if (data) {
-      const dataParsed = JSON.parse(data);
+    const localStorageData = localStorage.getItem(E_LOCAL_STORAGE.APP_NAME);
+    if (localStorageData) {
+      const dataParsed = JSON.parse(localStorageData);
 
       config.headers.Authorization = `Bearer ${dataParsed.access_token}`;
     }
