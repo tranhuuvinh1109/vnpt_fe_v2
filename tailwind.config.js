@@ -12,7 +12,7 @@ export default {
         borderPrimary: "#2C2B2C",
         elementBgMain: "#F5F7FB",
         elementBgSecondary: "#FFFFFF",
-        elementPrimary: "#746FFF",
+        elementPrimary: "#0066B3",
       },
       fontFamily: {
         montserrat: ["Montserrat Alternates", "sans-serif"],
